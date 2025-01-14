@@ -1,0 +1,303 @@
+v0.2.3
+- Initially published version
+
+v0.2.4
+- Fixed closing of file descriptor of event loop's semaphore on exec
+- Fixed interrupt handling when polling
+- Improved tutorial
+- Fixed issue with googlemock
+- Added object proxy factory overload that takes unique_ptr to a connection
+- Workaround: Clang compilation error when compiling sdbus::Struct (seems like an issue of Clang)
+
+v0.2.5
+- Real fix for issue with sdbus::Struct inherited constructors
+- Little code refactorings and improvements
+
+v0.2.6
+- Fixed memory leak in Message copy operations
+
+v0.3.0
+- Introduced support for asynchronous server-side methods
+- Refactored the concept of Message into distinctive concrete message types
+- As this release comes with breaking API changes:
+    * if you're using lower-level API, please rename 'Message' to whatever concrete message type (MethodCall, MethodReply, Signal) is needed there,
+    * if you're using higher-level API, please re-compile and re-link your application against sdbus-c++,
+    * if you're using generated stub headers, please re-compile and re-link your application against sdbus-c++.
+
+v0.3.1
+- Fixed hogging the CPU by server with async methods (issue #15)
+
+v0.3.2
+- Switched from autotools to CMake build system
+
+v0.3.3
+- Minor fixes in tutorial examples
+- Add comment on threading traits of Variant and its const methods
+- Fix broken invariant of const Variant::peekValueType() method
+
+v0.4.0
+- Introduce support and implementation of common D-Bus annotations
+- Remove hard-coded warning-related compiler options from the build system
+
+v0.4.1
+- Change constexpr member into a getter method to be compatible across odr-usage rules of various compiler versions
+
+v0.4.2
+- Improve documentation
+- Minor code improvements
+- Introduce sdbus-c++ performance tests with measurements
+
+v0.4.3
+- Add another abstraction layer for sd-bus to improve isolation for unit testing
+- Minor code improvements for consistency and clarity
+- Not-existing interface name and object path fixes in integration tests
+
+v0.5.0
+- Redesign of the Connection model for scalability, thread-safety, simplicity and clarity
+- [[Breaking ABI change]] Introduce support for asynchronous invocation of D-Bus methods on client-side
+- Revise and extend sdbus-c++ tutorial
+- Introduce stress tests that involve a D-Bus server and client interacting in dense communication in both sync and async ways
+- Compilation error fixes for older gcc versions
+
+v0.5.1
+- Cleanups of CMakeLists.txt
+- Rename sdbus-c++ test executables for consistency
+- Rename sdbus-c++ stub code generator executable
+- Introduce generation of doxygen documentation
+- Improve documentation
+
+v0.5.2
+- Simplify and unify basic API level callbacks for both sync and async methods
+
+v0.5.3
+- Extend stress tests with dynamic object and proxy creation and destruction from multiple threads
+- [[Breaking ABI change]] Add getConnection() method to IObject
+- A few minor fixes
+
+v0.6.0
+- This release comes with a number of API and ABI breaking changes (that hopefully lead to a more mature and stable API for near future):
+  - Some constructs have been renamed (see below for details), you'll have to adapt your sources whether you're using the basic or the convenience sdbus-c++ API.
+  - You'll also have to re-generate adaptor/proxy stubs with the new stub code generator if you're using them.
+  - And you'll have to take care of manual registeration/deregistration in the constructors/destructors of your final adaptor and proxy classes. See updated using sdbus-c++ tutorial.
+- Cleaning up some names (of class, methods, files):
+  * ConvenienceClasses.h/.inl/.cpp -> ConvenienceApiClasses.h/.inl/.cpp
+  * IObjectProxy class -> IProxy
+  * Interfaces class -> AdaptorInterfaces
+  * Interfaces.h -> split into AdaptorInterfaces.h and ProxyInterfaces.h
+  * createObjectProxy() method -> createProxy()
+- Add new unregister() virtual function to IObject and IProxy to allow for safe construction and destructions of D-Bus ojects and proxies hooked to live D-Bus connections.
+- Extend stress tests to allow testing safe initialization/deinitialization of objects and proxies
+- Fix gcc warnings
+- Use release v1.8.1 of googletest for tests
+
+v0.7.0
+- [[Breaking ABI change]] Added full support for ObjectManager, Properties and other standard D-Bus interfaces (Reordering virtual functions in interface classes)
+- sdbus-c++ now can automatically download, build and incorporate libsystemd static library, which makes things pretty easy in non-systemd environments
+- Minor changes in generated proxy/adaptor code:
+  * renamed interfaceName to INTERFACE_NAME to avoid potential naming clashes
+  * signal emitting methods now begin with "emit" prefix and capitalized first letter of signal name
+- sdbus-c++ file organization has been adjusted to comply to de-facto OSS project standards
+- Build system improvements -- moving towards more modern CMake
+- Using googletest from master branch instead of v1.8.1 which has THREADS_PTHREAD_ARG issue when cross-compiling
+- Documentation improvements
+- Minor changes (renamings) in the code generated by sdbus-c++-xml2cpp generator
+- Other minor fixes and internal design improvements
+
+v0.7.1
+- Fixed waiting in integration tests
+- Added object manager automatically in ObjectManager_adaptor constructor
+- Introduced support for unix fd type
+- Redesigned Message class hierarchy to be more idiomatic, clean and intent-revealing
+- Resolved a few clang-tidy warnings and suggestions
+- Extended the tutorial with info on standard D-Bus interfaces
+- Added protected non-virtual destructor in generated *_proxy/*_adaptor classes
+
+v0.7.2
+- Rewrite UnixFd implementation from plain UnixFd struct to full-ownership-semantics UnixFd class
+
+v0.7.3
+- Add ability to integrate with external event loops
+- Add getSenderName() method to Message
+- Skip GetMachineId integration test case when /etc/machine-id is not available
+
+v0.7.4
+- Add support for custom timeout of D-Bus method calls
+- Add support for opening a connection to a remote system bus using ssh
+- Internal refactoring: Use tag dispatching to construct various types of Connection
+
+v0.7.5
+- [[Breaking ABI change]] No more hiding from C++17: Move API code containing C++17 uncaught_exceptions calls from within library to public API
+- Add a method to retrieve the unique name of a connection
+
+v0.7.6
+- Fixes of clang-8 errors and warnings
+
+v0.7.7
+- Fix race condition of polling on D-Bus fd from two threads (event loop thread and sync D-Bus call thread)
+- Little ordering fix in stress tests
+
+v0.7.8
+- Switch from thread_local to global bus instance that is used to create Variant instances (thread_local caused issues with Variant in very special inter-thread situations)
+
+v0.8.0
+- [[Breaking ABI change]]  Implement support for input & output parameter names for D-Bus methods and signals, which are used in introspection
+- Explain better in tutorial the design and how to use connections in relation to objects and proxies
+
+v0.8.1
+- Switch to full C++17 support
+- Switch to more modern CMake (>=3.12)
+- Provide better names to event loop-related IConnection methods, keep old ones marked as deprecated for backwards compatibility
+
+v0.8.2
+- Introduce support for cancellable async calls
+- Add getObjectPath() for proxy and object classes
+- Sanitize names of namespaces/methods/signals/properties/arguments in sdbus-c++-xml2cpp
+- Fix delivery of signals to multiple proxies subscribed to them
+- Fix file existence condition in sdbus-c++-xml2cpp
+- Fix CallData race condition in Proxy::callMethod
+- Fix integration tests for libsystemd older than 242
+- Fix installation of public sd-bus headers in internal libsystemd build
+- Fix integration test cases failing in specific situations
+- Fix build with clang 9.0.1 and libcxx
+- Fix potential data race in Proxy's condition variable
+
+v0.8.3
+- Fix build with gcc 8.3
+- Address a few inconsistencies and make code more idiomatic
+- Clean up integration tests
+- Remove non-virtual-dtor warnings by making classes final
+- Update CMake configuration flag names
+- Fix unused variable warning for release builds
+- Introduce CI workflow based on GitHub Actions
+
+v0.9.0
+- Provide CMake config and PkgConfig files for tools
+- Provide access to D-Bus message in high-level API
+- Add API to set signal destination
+- Add IProxy::getConnection() method
+- Add README and sdbus-c++ tutorial as additional pages in doxydocs
+- Enable default construction of PendingAsyncCall
+- Add API to get message path and message destination
+- Avoid propagating msg unpack exceptions to the event loop
+- Fix issue #145: signals are not filtered by sender
+- Fix race condition in Proxy and Object destructor
+- Fix seg fault in Message::peekType()
+- Add information to documentation about conan recipe
+- Add cpack to build debian packages, split the packages by components
+- Catch sdbus-c++ exceptions flying from Proxy callbacks to libsystemd
+- Add createDefaultBusConnection() method
+- Make resetting loop thread ID exception-safe
+- Support Error parameter in signal handlers
+- Add specific sections for tips and notes in the tutorial
+- A few additional documentation and test updates and improvements
+
+v1.0.0
+- [[Breaking API change]] Fixed the API to send org.freedesktop.DBus.ObjectManager.InterfacesAdded and org.freedesktop.DBus.ObjectManager.InterfacesRemoved signals via the generated stubs layer.
+  - StandardInterfaces.h: Split ObjectManager_adaptor and ManagedObject_adaptor.
+- New examples directory. First example covers the object manager. Further examples might follow.
+
+v1.1.0
+- Fix timeout handling for asynchronous method calls
+- Add support for unregistering signal handler
+- Add support for chrono literals in sdbus-c++-xml2cpp generator
+- Additional little fixes and improvements in code, build system, and documentation
+
+v1.2.0
+- Add support for match rules
+- Add support for session bus connection at custom address
+- Add CMake variable for extra libsystemd config options
+- Use pseudo D-Bus connection for plain messages
+- Rename dont_request_slot tag to floating_slot
+- Add validity checks for names and paths
+- Remove executable flag from source files
+- Detect missing type after array declaration
+- Fix invalid assert on event fd
+- Enable move for ObjectPath and Signature
+- Add printer for std::chrono in googletest v1.11.0
+- Fix potential undefined behavior in creation of sdbus::Error
+- Additional little fixes and improvements in code, build system, and documentation
+
+v1.3.0
+- Add support for light-weight proxies (proxies without own event loop threads)
+- Extend documentation with explicit mapping between D-Bus and corresponding C++ types
+- Support move semantics in generated adaptor and proxy classes
+- Adaptations for libsystemd v251
+- Fix for proper complete sending of long D-Bus messages by explicitly flushing them
+- Add support for std::future-based async calls
+- Fix race condition in async Proxy::callMethod
+- Fix pseudo-connection static lifetime issue with Phoenix pattern
+- Speed up performance of of serialization of arrays of trivial D-Bus types
+- Make sdbus::Struct a tuple-like class, so it's usable wherever std::tuple is
+- Add support for std::array, std::span and std::unordered_map as additional C++ types for D-Bus array types
+- Add support for libelogind as an addition to libsystemd
+- Add support for std::future-based async methods in codegen tool
+- Additional little fixes and improvements in code, build system, CI, and documentation
+
+v1.4.0
+- Implement API for convenient asynchronous property get/set on the client-side
+- Add support for FreeBSD systems (including support for basu implementation of sd-bus on non-systemd machines)
+- Add support for direct, peer-to-peer connections
+- Add option to create IConnection directly from an underlying sd_bus instance
+- Some additional fixes
+
+v1.5.0
+- Improve handling of exceptions from callback handlers
+- Add support for async registration of matches
+- Correctly add libsystemd dependency to pkgconfi
+- Fix request name signal handling issue
+- Add INSTALL_TESTS CMake option
+- Minor UnixFd cleanups
+- Additional little fixes and updates in code, build system, CI, and documentation
+
+v1.6.0
+- Add support for enums in D-Bus serialization and signatures
+- Add support for std::variant as an alternative C++ type for D-Bus Variant
+- Add support for implicit conversions between std::variant and sdbus::Variant
+- Fix missing includes
+
+v2.0.0
+- A new major version with revamped API, bringing numerous new features, simplifications, fixes and breaking changes improving not only API consistency, safety and expressiveness, but also performance
+- Add section 'Migrating to sdbus-c++ v2' to the 'Using sdbus-c++' document providing the complete list of breaking API/ABI/behavior changes and migration notes
+- Switch to C++20 standard (but the API is backwards-compatible with C++17, skipping C++20 features in such a case)
+- Add strong types to public API
+- Add support for string_view as a D-Bus type representation
+- Enable compile-time D-Bus signature generation
+- Redesign Object vtable registration API
+- Improve Proxy signal subscription API
+- Refactor object manager API for consistency
+- Introduce native sd-event integration
+- Let callbacks take message objects by value
+- Simplify async D-Bus connection handling
+- Simplify async call state flag
+- Make Variant constructor explicit
+- Use optional for passing potential call errors
+- Rename and re-organize CMake options
+- Rename connection creation methods
+- Have all async function names finish with *Async for consistency
+- Implement more flexible searching for sd-bus libs
+- Add new `SDBUSCPP_SDBUS_LIB` CMake configuration variable determining which sd-bus library shall be picked
+- Make Variant conversion operator explicit
+- Use sd-bus API to get the current message
+- Use sd_bus_match_signal() for signal registration
+- Provide also const char* overloads for convenience functions
+- Disable move in generated adaptor and proxy classes
+- Improve and make more efficient some Message API
+- Add Slot-returning overloads of async method calls
+- Remove floating_slot_t tag and use return_slot_t instead
+- Add [[nodiscard]] to many relevant API functions
+- Add proper fix for timeout handling
+- Fix for external event loops in which the event loop thread ID was not correctly initialized (now fixed and simplified by not needing the thread ID anymore)
+- Remove deprecated stuff
+- Add `SDBUSCPP_` prefix to CMake configuration variables to avoid conflicts with downstream projects
+- Require systemd of at least v238
+- Many other fixes and updates in code, tests, build system, CI, and documentation
+
+v2.1.0
+- Add SDBUSCPP_REGISTER_STRUCT macro to conveniently teach sdbus-c++ about user-defined structs
+- Extend the SDBUSCPP_REGISTER_STRUCT macro with serialization of user-defined structs as dicts, and deserialization of dicts into user-defined structs
+- Make createPlainMessage() function public
+- Solve the problem of sending large D-Bus messages properly (through the event loop thread)
+- Fix partially renamed BUILD_DOXYGEN_DOC CMake option
+- Change googletest to default version 1.14.0
+- Add version parameter to the xml2cpp codegen tool
+- A few other internal refactorings and improvements

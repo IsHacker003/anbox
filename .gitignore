@@ -1,0 +1,10 @@
+build*/
+parts/
+stage/
+prime/
+snap/.snapcraft
+*.snap
+CMakeLists.txt.user
+*.o
+.idea
+.vscode

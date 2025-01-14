@@ -1,0 +1,6 @@
+add_subdirectory(android)
+add_subdirectory(application)
+add_subdirectory(support)
+add_subdirectory(common)
+add_subdirectory(graphics)
+add_subdirectory(container)
