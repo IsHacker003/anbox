@@ -1,7 +1,7 @@
 ## IMPORTANT - Hi there 👋
 
 
-The Anbox project [was once ago created in 2017](https://www.omgubuntu.co.uk/2017/04/android-apps-linux-desktop-anbox) to bring Android to any Linux based desktop operating system. It's development has however stalled in the past years and it's only fair to say that now in 2023 it's no longer actively developed.
+The Anbox project [was once ago created in 2017](https://www.omgubuntu.co.uk/2017/04/android-apps-linux-desktop-anbox) to bring Android to any Linux based desktop operating system. It's development has however stalled in the past years and it's only fair to say that now in 2025 it's no longer actively developed.
 
 In the past years new alternatives have came up which are carrying the same idea of a containerized Android forward:
 
